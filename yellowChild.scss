@@ -1,0 +1,463 @@
+$main_bc_color:  rgb(249,217,70);
+$bc_color_blue:  rgb(32,116,160);
+
+@mixin border( $w:1px, $c:#000){
+	border: $w solid $c;
+}
+@mixin wAndH( $w:0px , $h:0px){
+	width: $w;
+	height: $h;
+}
+@mixin border-radius( $r:1px ){
+	-webkit-border-radius: $r;
+	-moz-border-radius: $r;
+	border-radius: $r;
+}
+@mixin rotate( $d ){
+	-webkit-transform: rotate( $d );
+	-moz-transform: rotate( $d );
+	transform: rotate( $d );
+}
+
+@mixin pos( $pos, $t, $r, $b, $l ){
+	position : $pos;
+	@if $t!=null {
+		top : $t;
+	}	
+	@if $r!=null {
+		right : $r;
+	}
+	@if $b!=null  {
+		bottom : $b;
+	}
+	@if $l!=null  {
+		left : $l;
+	}
+}
+
+@mixin trousersLine( $p ){
+	@include wAndH( 39px, 30px );
+	background-color: $bc_color_blue;
+	border-bottom: 5px solid #000;
+	border-#{$p}: 5px solid #000;
+	border-bottom-#{$p}-radius: 100%;
+}
+
+%beltAfter{
+	content: "";
+	@include wAndH( 8px, 8px );
+	background-color: #000;
+	z-index: 4;
+    @include border-radius(50%);
+}
+
+@mixin animate( $k, $t, $l, $num ){
+	animation: $k $t $l $num ;
+	-moz-animation: $k $t $l $num ;
+	-webkit-animation: $k $t $l $num ;
+}
+
+@import "easy-animation.scss";
+.content{
+	padding: 0px;
+	margin: 100px auto;
+	position: relative;
+	@include wAndH( 400px, 500px );
+
+	.hair{
+		@include wAndH( 100%, 90px);
+		@include pos( absolute , -10%, null, null, null);
+
+		.hair-1{
+			@include wAndH( 130px, 130px);
+			background-color: #fff;
+			border-top: 10px solid #000;
+			border-radius: 50%;
+			@include pos( absolute, 24%, null, null, 20%);
+			@include rotate(27deg);
+
+			@include ea-animation(hairAnimate, 2s, ease-in-out, 0s, infinite);
+			@include ea-keyframes(hairAnimate) {
+			  0%,25%,31%,100%{}
+				30%{
+					@include ea-transform(rotate(33deg));
+					@include ea-transform(translate(-4px, -2px));
+				}
+			}
+			
+		}
+		.hair-2{
+			@include wAndH( 80px, 80px);
+			background-color: #fff;
+			border-top: 10px solid #000;
+			border-radius: 50%;
+			@include pos( absolute, 38%, null, null, 32%);
+			@include rotate(15deg);
+
+			@include ea-animation(hairAnimate, 2s, ease-in-out, 1s, infinite);
+			//minxin包含@content时，当include时候会将内容赋值给@content
+			@include ea-keyframes(hairAnimate) {
+			  0%,25%,31%,100%{}
+				30%{
+					-webkit-transform: rotate(33deg) translate(-3px, -1px);
+				}
+			}
+
+		}
+	}
+
+	.body{
+		padding: 0px atuo;
+		margin: 100px auto;
+		background-color: $main_bc_color;
+		@include wAndH( 244px, 406px );
+		@include border(5px);
+		@include border-radius(115px);
+		position: relative;
+		overflow: hidden;
+		z-index: 2;
+
+		.trousers{
+			.trousers-bottom{
+				@include wAndH( 100%, 102px );
+				background-color: $bc_color_blue;
+				border-top: 5px solid #000;
+				z-index: 1;
+				position: absolute;
+				bottom: 0;
+				border-bottom-left-radius: 110px;
+				border-bottom-right-radius: 110px;
+				
+				
+				.trousers-left-line{
+					@include trousersLine(right);
+					@include pos( absolute, 5%, null, null, 0 );
+				}
+
+				.trousers-right-line{
+					@include trousersLine(left);
+					@include pos( absolute, 5%, 0, null, null );
+				}
+
+				.trousers-mid-line{
+					@include wAndH(0, 40px);
+					@include pos( absolute, null, 50%, 0, null );
+					border-right: 5px solid #000;
+				}
+			}
+			
+			.trousers-top{
+				@include wAndH( 160px, 60px );
+				background-color: $bc_color_blue;
+				@include border(5px);
+				z-index: 2;
+				border-bottom: none;
+				position: absolute;
+				bottom: 102px;
+				left: 37px;
+
+				.trousers-pocket{
+					@include wAndH( 60px, 50px );
+					background-color: $bc_color_blue;
+					@include border(5px);
+					@include pos( absolute, 60%, null, null, 45px );
+					z-index: 3;
+					border-bottom-left-radius: 20px;
+					border-bottom-right-radius: 20px;
+				}
+			}
+
+			.trousers-left-belt{
+				@include wAndH( 100px, 16px );
+				@include border(5px);
+				background-color: $bc_color_blue;
+				@include rotate(45deg);
+				z-index: 3;
+				@include pos( absolute, 53%, null, null, -30px );
+
+				&:after{
+					@extend %beltAfter;
+					@include pos( absolute, 25%, null, null , 85% );
+				}
+			}
+
+			.trousers-right-belt{
+				@include wAndH( 100px, 16px );
+				@include border(5px);
+				background-color: $bc_color_blue;
+				@include rotate(-45deg);
+				z-index: 3;
+				@include pos( absolute, 53%, -30px, null, null );
+
+				&:after{
+					@extend %beltAfter;
+					@include pos( absolute, 25%, null, null , 8% );
+				}
+			}
+
+		}
+
+		.eye{
+			@include wAndH( 100%, 100px );
+			@include pos(absolute, 15%, null, null, null);
+			
+			%eyeGlass{
+				@include wAndH( 85px, 85px );
+				@include border(5px);
+				@include border-radius(50%);
+				background-color : #fff;
+			}
+
+			%eyes{
+				@include wAndH( 45px, 45px );
+				@include border-radius(50%);
+				background-color : #000;
+			}
+
+			%eyesWhite{
+				content : "";
+				@include wAndH( 25px, 25px );
+				@include border-radius(50%);
+				background-color : #fff;
+			}
+
+			%eyeGlassAfter{
+				content : "";
+				@include wAndH( 40px, 20px );
+				background-color: #000;
+			}
+
+			%eyeBlackAnimate{
+				@include ea-animation(eyeBlackAnimate, 4s, ease-out, 1s, infinite);
+					@include ea-keyframes(eyeBlackAnimate){
+						0%,50%,100%{
+							@include ea-transform( translate( 0px, 0px ) );
+						}
+						15%{
+							@include ea-transform( translate( 15px, 0px ) );
+						}
+						65%{
+							@include ea-transform( translate( -15px, 0px ) );
+						}
+					};
+			}
+			%eyeWhiteAnimate{
+				@include ea-animation(eyeWhiteAnimate, 4s, ease-out, 1s, infinite);
+					@include ea-keyframes(eyeWhiteAnimate){
+						0%,50%,100%{
+							@include ea-transform( translate( 0px, 0px ) );
+						}
+						15%{
+							@include ea-transform( translate( 1px, 3px ) );
+						}
+						65%{
+							@include ea-transform( translate( -16px, 7px ) );
+						}
+					};
+			}
+
+			.eye-glasses-left{
+				@extend %eyeGlass;
+				@include pos(absolute, null, null, null, 27px);
+
+				.eye-left{
+					@extend %eyes;
+					@include pos(absolute, 20px, null, null, 20px);
+					@extend %eyeBlackAnimate;
+
+					&:after{
+						@extend %eyesWhite;
+						@include pos(absolute, 15%, 2px, null, null);
+						@extend %eyeWhiteAnimate;
+					}
+				}
+
+				&:after{
+					@extend %eyeGlassAfter;
+					@include rotate(10deg);
+					@include pos(absolute, 30%, null, null, -45%);
+
+				}
+				
+			}
+			.eye-glasses-right{
+				@extend %eyeGlass;
+				@include pos(absolute, null, 27px, null, null);
+
+				.eye-right{
+					@extend %eyes;
+					@include pos(absolute, 20px, null, null, 20px);
+					@extend %eyeBlackAnimate;
+
+					&:after{
+						@extend %eyesWhite;
+						@include pos(absolute, 15%, 2px, null, null);
+						@extend %eyeWhiteAnimate;
+					}
+				}
+
+				&:after{
+					@extend %eyeGlassAfter;
+					@include rotate(-10deg);
+					@include pos(absolute, 32%, -48%, null, null);
+				}
+			}
+		}
+
+		.mouse{
+			@include wAndH( 60px, 35px);
+			@include border( 5px );
+			background-color: #fff;
+			@include pos( absolute, 42%, 87px, null, null);
+			border-bottom-left-radius : 40px;
+			border-top-right-radius : 40px;
+			@include rotate(-30deg);
+			
+			@include ea-animation(mouseAnimate, 2s, ease-in-out, 1s, infinite);
+			@include ea-keyframes(mouseAnimate){
+				0%,100%{}
+				50%{
+					@include pos( absolute, 42%, 100px, null, null);
+					@include wAndH( 42px, 25px);
+				}
+			}
+
+			&:after{
+				content : "";
+				@include wAndH( 80px, 35px);
+				background-color: $main_bc_color;
+				border-top-left-radius : 40px;
+				border-top-right-radius : 40px;
+				border-bottom: 5px solid #000;
+				@include rotate(30deg);
+				@include pos( absolute, -51%, -32%, null, null);
+
+				@include ea-animation(mouseAfterAnimate, 2s, ease-in-out, 1s, infinite);
+				@include ea-keyframes(mouseAfterAnimate){
+					0%,100%{}
+					50%{
+						@include wAndH( 60px, 25px);
+						@include pos( absolute, -55%, -40%, null, null);
+					}
+				}
+			}
+		}
+	}
+
+	.arm{
+		@include wAndH( 100%, 85px);
+		@include pos( absolute, 45%, 0, null, null);
+		
+		%armAfter{
+			content: "";
+			@include wAndH( 20px, 20px);
+			background-color: #000;
+			@include border-radius(5px);
+		}
+
+		%arm{
+			@include wAndH( 80px, 80px);
+			@include border(5px);
+			background-color: $main_bc_color;
+			@include border-radius(20px);
+			z-index: 1;
+		}
+
+		.arm-left{
+			@extend %arm;
+			@include rotate(35deg);
+			@include pos( absolute, 0, null, null, 48px);
+			
+			@include ea-animation(armLeftAnimate, 1s, ease-in-out, 0s, infinite);
+			@include ea-keyframes(armLeftAnimate){
+				0%,100%{}
+				50%{
+					@include ea-transform( rotate(30deg) );
+				}
+			};
+
+			&:after{
+				@extend %armAfter;
+				@include pos( absolute, 50%, null, null, 20px);
+			}
+		}
+
+		.arm-right{
+			@extend %arm;
+			@include rotate(55deg);
+			@include pos( absolute, 0, 48px, null, null);
+
+			@include ea-animation(armRightAnimate, 1s, ease-in-out, 0s, infinite);
+			@include ea-keyframes(armRightAnimate){
+				0%,100%{}
+				50%{
+					@include ea-transform( rotate(60deg) );
+				}
+			};
+			&:after{
+				@extend %armAfter;
+				@include pos( absolute, null, 20px, 50%, null);
+			}
+		}
+	}
+
+	.leg{
+		@include wAndH( 244px, 80px);
+		margin: -30% auto;
+		position: relative;
+		
+		%legAfter{
+			content: "";
+				@include wAndH( 60px, 30px);
+				background-color: #000;
+				@include border-radius(40%);
+		}
+
+		.leg-left{
+			@include wAndH( 40px, 70px);
+			background-color: #000;
+			@include pos( absolute, 0, null, null, 30%);
+			@include ea-animation(legLeftAnimate, .8s,  ease-in-out, 0s, infinite);
+			@include ea-keyframes(legLeftAnimate){
+				0%,100%{}
+				30%{
+					@include ea-transform( rotate(10deg) );
+				}
+			}
+			
+			&:after{
+				@extend %legAfter;
+				@include rotate(5deg);
+				@include pos( absolute, 55%, null, null, -126%);
+			}
+		}
+
+		.leg-right{
+			@include wAndH( 40px, 70px);
+			background-color: #000;
+			@include pos( absolute, 0, null, null, 55%);
+			@include ea-animation(legRightAnimate, .8s, ease-in-out, 0s, infinite);
+			@include ea-keyframes(legRightAnimate){
+				0%,100%{}
+				80%{
+					@include ea-transform( rotate(-10deg) );
+				}
+			}
+			&:after{
+				@extend %legAfter;
+				@include rotate(-5deg);
+				@include pos( absolute, 55%, -126%, null, null);
+			}
+
+		}
+
+		.leg-shadow{
+			@include wAndH( 244px, 2px);
+			background-color: rgba(0,0,0,0.3);
+			box-shadow: 0 0 2px 4px rgba(0,0,0,0.3);
+			@include border-radius(50%);
+			@include pos( absolute, 90%, null, null, null);
+		}
+	}
+}
+
